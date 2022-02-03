@@ -17,6 +17,9 @@ public class RadixNumberConverter {
     for (int digitCounter = 0, stringIterator = preparedStringChars.length - 1; stringIterator >= 0; digitCounter++, stringIterator--) {
       int characterValue = _charsCollection.evaluateCharacter(preparedStringChars[stringIterator]);
 
+      if(characterValue >= radix)
+        throw new IllegalArgumentException("The input string has radix not matching the argument");
+
       result += characterValue * ((int) Math.pow(radix, digitCounter));
     }
 
@@ -41,8 +44,12 @@ public class RadixNumberConverter {
     BigDecimal fractionPartValue = new BigDecimal(0);
 
     for (int i = 0; i < fractionPart.length(); i++) {
-      int charValue = _charsCollection.evaluateCharacter(fractionPartCharArray[i]);
-      fractionPartValue = fractionPartValue.add(new BigDecimal(charValue * (Math.pow(radix, -1 * (i + 1)))));
+      int characterValue = _charsCollection.evaluateCharacter(fractionPartCharArray[i]);
+
+      if(characterValue >= radix)
+        throw new IllegalArgumentException("The input string has radix not matching the argument");
+
+      fractionPartValue = fractionPartValue.add(new BigDecimal(characterValue * (Math.pow(radix, -1 * (i + 1)))));
     }
 
     return fractionPartValue.add(new BigDecimal(integerPartValue));
