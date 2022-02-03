@@ -17,11 +17,18 @@ public class Main {
     Scanner scanner = new Scanner(System.in);
 
     RadixCharactersCollection collection = RadixCharactersCollection.radixMax36;
+    NumberStringValidator validator = new NumberStringValidator(collection);
 
     int maxRadix = collection.getMaxRadix();
 
     System.out.print("Enter input: ");
     String input = scanner.nextLine();
+
+    String inputValidationResult = validator.validateString(input);
+    if(inputValidationResult.length() != 0) {
+      System.out.println(inputValidationResult);
+      System.exit(-1);
+    }
 
     System.out.printf("Enter input radix (max %d): ", maxRadix);
     int inputRadix = readRadix(scanner, collection);
