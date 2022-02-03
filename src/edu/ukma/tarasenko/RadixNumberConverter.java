@@ -4,20 +4,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class RadixNumberConverter {
-  private final char[] chars;
+  private final RadixCharactersCollection _charsCollection;
 
-  public RadixNumberConverter() {
-    chars = "0123456789abcdef".toCharArray();
-  }
-
-  private int evaluateCharacter(char value) {
-    for (int i = 0; i < chars.length; i++) {
-      if (value == chars[i]) {
-        return i;
-      }
-    }
-
-    return 0;
+  public RadixNumberConverter(RadixCharactersCollection charsCollection) {
+    this._charsCollection = charsCollection;
   }
 
   private int convertStringToDecimalInt(String input, int radix) {
@@ -25,7 +15,7 @@ public class RadixNumberConverter {
     char[] preparedStringChars = prepareString(input).toCharArray();
 
     for (int digitCounter = 0, stringIterator = preparedStringChars.length - 1; stringIterator >= 0; digitCounter++, stringIterator--) {
-      int characterValue = evaluateCharacter(preparedStringChars[stringIterator]);
+      int characterValue = _charsCollection.evaluateCharacter(preparedStringChars[stringIterator]);
 
       result += characterValue * ((int) Math.pow(radix, digitCounter));
     }
@@ -51,7 +41,7 @@ public class RadixNumberConverter {
     BigDecimal fractionPartValue = new BigDecimal(0);
 
     for (int i = 0; i < fractionPart.length(); i++) {
-      int charValue = evaluateCharacter(fractionPartCharArray[i]);
+      int charValue = _charsCollection.evaluateCharacter(fractionPartCharArray[i]);
       fractionPartValue = fractionPartValue.add(new BigDecimal(charValue * (Math.pow(radix, -1 * (i + 1)))));
     }
 
@@ -64,7 +54,7 @@ public class RadixNumberConverter {
     while (input > 0) {
       int numberValue = input % radix;
       input /= radix;
-      resultStringBuilder.append(chars[numberValue]);
+      resultStringBuilder.append(_charsCollection.getCharByValue(numberValue));
     }
 
     resultStringBuilder.reverse();
@@ -87,7 +77,7 @@ public class RadixNumberConverter {
       int value = fractionPart.intValue();
       fractionPart = fractionPart.subtract(new BigDecimal(value));
 
-      fractionPartStringBuilder.append(chars[value]);
+      fractionPartStringBuilder.append(_charsCollection.getCharByValue(value));
 
       if (fractionPart.compareTo(new BigDecimal(0)) == 0)
         break;

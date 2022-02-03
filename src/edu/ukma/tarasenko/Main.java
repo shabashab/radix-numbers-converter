@@ -1,24 +1,55 @@
 package edu.ukma.tarasenko;
 
+import java.util.InputMismatchException;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
+  private static String validateRadix(int radix, RadixCharactersCollection collection) {
+    if(radix < 1 || radix > collection.getMaxRadix()) {
+      return "Invalid radix value. Should be greater than 1 and less than " + collection.getMaxRadix();
+    }
+
+    return "";
+  }
+
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
+
+    RadixCharactersCollection collection = RadixCharactersCollection.radixMax36;
+
+    int maxRadix = collection.getMaxRadix();
 
     System.out.print("Enter input: ");
     String input = scanner.nextLine();
 
-    System.out.print("Enter input radix: ");
-    int inputRadix = scanner.nextInt();
+    System.out.printf("Enter input radix (max %d): ", maxRadix);
+    int inputRadix = readRadix(scanner, collection);
 
-    System.out.print("Enter output radix: ");
-    int outputRadix = scanner.nextInt();
+    System.out.printf("Enter output radix (max %d): ", maxRadix);
+    int outputRadix = readRadix(scanner, collection);
 
-    RadixNumberConverter converter = new RadixNumberConverter();
+    RadixNumberConverter converter = new RadixNumberConverter(collection);
 
     String result = converter.convertToRadix(input, inputRadix, outputRadix);
     System.out.printf("The result is: %s\n", result.toUpperCase(Locale.ROOT));
+  }
+
+  private static int readRadix(Scanner scanner, RadixCharactersCollection collection) {
+    int radix = 0;
+    try {
+      radix = scanner.nextInt();
+    } catch (InputMismatchException exception) {
+      System.out.println("Invalid input data. " + exception.getMessage());
+      System.exit(-2);
+    }
+
+    String radixValidationResult = validateRadix(radix, collection);
+
+    if(radixValidationResult.length() != 0) {
+      System.out.println(radixValidationResult);
+      System.exit(-1);
+    }
+    return radix;
   }
 }
