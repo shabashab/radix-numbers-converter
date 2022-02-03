@@ -40,7 +40,7 @@ public class Main {
     try {
       radix = scanner.nextInt();
     } catch (InputMismatchException exception) {
-      System.out.println("Invalid input data. " + exception.getMessage());
+      System.out.println("Radix should be a number.");
       System.exit(-2);
     }
 
