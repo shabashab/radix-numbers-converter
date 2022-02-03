@@ -97,15 +97,6 @@ public class RadixNumberConverter {
     int value = convertStringToDecimalInt(input, inputRadix);
     return convertIntToString(value, outputRadix);
   }
-
-  //Returns a string with an error or empty string if no error
-  private String validateString(String input) {
-    if(input.matches("[0-9a-z]+[,.][0-9a-z]+"))
-      return "";
-
-    return "Invalid string format";
-  }
-
   private boolean checkIsStringNumberHasFractionPart(String input) {
     return input.matches("[0-9a-z]+[,.][0-9a-z]+");
   }
@@ -118,11 +109,6 @@ public class RadixNumberConverter {
     String preparedString = prepareString(input);
 
     final int fractionDigitsCount = 250;
-
-    String validationResult = validateString(preparedString);
-
-    if (validationResult.length() != 0)
-      throw new IllegalArgumentException("An error occurred while validating input string: " + validationResult);
 
     if (checkIsStringNumberHasFractionPart(preparedString)) {
       return convertToRadixDouble(input, inputRadix, outputRadix, fractionDigitsCount);

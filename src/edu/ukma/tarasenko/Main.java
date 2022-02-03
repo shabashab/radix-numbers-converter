@@ -22,7 +22,7 @@ public class Main {
     int maxRadix = collection.getMaxRadix();
 
     System.out.print("Enter input: ");
-    String input = scanner.nextLine();
+    String input = scanner.nextLine().toLowerCase(Locale.ROOT);
 
     String inputValidationResult = validator.validateString(input);
     if(inputValidationResult.length() != 0) {
