@@ -38,7 +38,7 @@ public class Main {
 
     RadixNumberConverter converter = new RadixNumberConverter(collection);
 
-    String result = converter.convertToRadix(input, inputRadix, outputRadix);
+    String result = converter.convertToRadix(input.toLowerCase(Locale.ROOT), inputRadix, outputRadix);
     System.out.printf("The result is: %s\n", result.toUpperCase(Locale.ROOT));
   }
 

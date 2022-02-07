@@ -12,7 +12,7 @@ public class RadixNumberConverter {
 
   private int convertStringToDecimalInt(String input, int radix) {
     int result = 0;
-    char[] preparedStringChars = prepareString(input).toCharArray();
+    char[] preparedStringChars = input.toCharArray();
 
     for (int digitCounter = 0, stringIterator = preparedStringChars.length - 1; stringIterator >= 0; digitCounter++, stringIterator--) {
       int characterValue = _charsCollection.evaluateCharacter(preparedStringChars[stringIterator]);
@@ -108,16 +108,10 @@ public class RadixNumberConverter {
     return input.matches("[0-9a-z]+[,.][0-9a-z]+");
   }
 
-  private String prepareString(String input) {
-    return input.toLowerCase();
-  }
-
   public String convertToRadix(String input, int inputRadix, int outputRadix) {
-    String preparedString = prepareString(input);
-
     final int fractionDigitsCount = 250;
 
-    if (checkIsStringNumberHasFractionPart(preparedString)) {
+    if (checkIsStringNumberHasFractionPart(input)) {
       return convertToRadixDouble(input, inputRadix, outputRadix, fractionDigitsCount);
     }
 
