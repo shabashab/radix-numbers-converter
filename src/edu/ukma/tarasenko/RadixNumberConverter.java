@@ -5,9 +5,15 @@ import java.math.RoundingMode;
 
 public class RadixNumberConverter {
   private final RadixCharactersCollection _charsCollection;
+  private final int _maxFractionDigitsCount;
 
   public RadixNumberConverter(RadixCharactersCollection charsCollection) {
+    this(charsCollection, 250);
+  }
+
+  public RadixNumberConverter(RadixCharactersCollection charsCollection, int maxFractionDigitsCount) {
     this._charsCollection = charsCollection;
+    this._maxFractionDigitsCount = maxFractionDigitsCount;
   }
 
   private int convertStringToDecimalInt(String input, int radix) {
@@ -69,7 +75,7 @@ public class RadixNumberConverter {
     return resultStringBuilder.toString();
   }
 
-  private String convertDecimalToString(BigDecimal input, int radix, int fractionDigitsCount) {
+  private String convertDecimalToString(BigDecimal input, int radix) {
     int integerPart = input.intValue();
     BigDecimal fractionPart = input.subtract(new BigDecimal(integerPart));
     fractionPart = fractionPart.setScale(15, RoundingMode.FLOOR);
@@ -78,7 +84,7 @@ public class RadixNumberConverter {
 
     StringBuilder fractionPartStringBuilder = new StringBuilder();
 
-    for (int i = 0; i < fractionDigitsCount; i++) {
+    for (int i = 0; i < this._maxFractionDigitsCount; i++) {
       fractionPart = fractionPart.multiply(new BigDecimal(radix));
 
       int value = fractionPart.intValue();
@@ -95,9 +101,9 @@ public class RadixNumberConverter {
     return integerPartString + "," + fractionPartString;
   }
 
-  private String convertToRadixDouble(String input, int inputRadix, int outputRadix, int fractionDigitsCount) {
+  private String convertToRadixDouble(String input, int inputRadix, int outputRadix) {
     BigDecimal value = convertStringToDecimal(input, inputRadix);
-    return convertDecimalToString(value, outputRadix, fractionDigitsCount);
+    return convertDecimalToString(value, outputRadix);
   }
 
   private String convertToRadixInt(String input, int inputRadix, int outputRadix) {
@@ -109,10 +115,8 @@ public class RadixNumberConverter {
   }
 
   public String convertToRadix(String input, int inputRadix, int outputRadix) {
-    final int fractionDigitsCount = 250;
-
     if (checkIsStringNumberHasFractionPart(input)) {
-      return convertToRadixDouble(input, inputRadix, outputRadix, fractionDigitsCount);
+      return convertToRadixDouble(input, inputRadix, outputRadix);
     }
 
     return convertToRadixInt(input, inputRadix, outputRadix);
